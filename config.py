@@ -8,7 +8,7 @@ env_loaded = load_dotenv()
 if not env_loaded:
     ResponseHandler.critical(
         msg="System startup failed: Environment and configuration settings are incomplete.",
-        technical_msg="Critical failure: .env file is missing from the project root.",
+        technical_msg=".env file is missing from the project root.",
         code=ErrorCodes.MISSING_ENV_FILE.value
     )
 
@@ -31,14 +31,14 @@ if not DB_NAME:
 if missing_critical_vars:
     ResponseHandler.critical(
         msg="System startup failed: Environment and configuration settings are incomplete.",
-        technical_msg=f"Critical failure: Missing required keys in .env: {', '.join(missing_critical_vars)}",
+        technical_msg=f"Missing required keys in .env: {', '.join(missing_critical_vars)}",
         code=ErrorCodes.INCOMPLETE_CONFIG.value
     )
 
 if DB_USER.lower() == "root": # type: ignore #
     ResponseHandler.warning(
-        msg="Configuration warning: Using 'root' as the database user is not recommended for production environments.",
-        technical_msg="Warning: The 'root' user has full privileges and should only be used for administrative tasks.",
+        msg="Using 'root' as the database user is not recommended for production environments.",
+        technical_msg="The 'root' user has full privileges and should only be used for administrative tasks.",
         code=ErrorCodes.ROOT_USER_WARNING.value
     )
 

@@ -1,10 +1,15 @@
+# import os
 import sys
 import logging
 from typing import Any, Optional
 
+# os.makedirs("logs", exist_ok=True)
+
+# log_path = os.path.join("logs", "app.log")
+
 logging.basicConfig(
-    filename='app.log',
-    level=logging.ERROR,
+    filename=r'logs\app.log',
+    level=logging.WARNING,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
@@ -26,14 +31,14 @@ class ResponseHandler:
 
     @classmethod
     def critical(cls, msg: str, technical_msg: Optional[str] = None, code: Optional[int] = None):
-        logging.critical(f"Critical failure: {technical_msg} [Code: {code}]")
+        logging.critical(f"{technical_msg} [Code: {code}]")
         print(f"❌ [CRITICAL ERROR]: {msg}")
         sys.exit(1)  # Exit the application on critical failure
 
     @classmethod
     def warning(cls, msg: str, technical_msg: Optional[str] = None, code: Optional[int] = None):
-        logging.warning(f"Warning: {technical_msg} [Code: {code}]")
+        logging.warning(f"{technical_msg} [Code: {code}]")
         print(f"⚠️ [WARNING]: {msg}")
-        return cls(success=False, error_msg=msg, error_code=code)
+        return cls(success=True, error_msg=msg, error_code=code)
 
 

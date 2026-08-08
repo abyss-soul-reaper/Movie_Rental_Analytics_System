@@ -21,10 +21,10 @@ def customer_segments(data, limit=10):
         print(f"Customer Segment: {row['customer_segment']:<10} ({row['segment_label']})")
         print("-" * 50)
 
-# from db import DatabaseHandler as DBHandler
+from db import DatabaseHandler as DBHandler
 
-# from queries import get_customer_segments
+from database.queries import get_customer_segments
 
-# customer_segments(get_customer_segments(DBHandler()))
+customer_segments(get_customer_segments(DBHandler()))
 
 
