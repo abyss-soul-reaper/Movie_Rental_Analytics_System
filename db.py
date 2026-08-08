@@ -1,5 +1,7 @@
-from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
 import mysql.connector
+from execptions.error_codes import ErrorCodes
+from execptions.responce_handler import ResponseHandler
+from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT
 
 class DatabaseHandler:
     def __init__(self):
@@ -10,7 +12,8 @@ class DatabaseHandler:
             host=DB_HOST,
             user=DB_USER,
             password=DB_PASSWORD,
-            database=DB_NAME
+            database=DB_NAME,
+            port=int(DB_PORT)  # Ensure the port is an integer
         )
 
     def cursor(self):
