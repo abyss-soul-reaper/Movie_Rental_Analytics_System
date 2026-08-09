@@ -1,6 +1,11 @@
-def customer_segments(data, limit=10):
+def customer_segments(response, limit=10):
     from collections import Counter
 
+    if not response.success:
+        print(f"Error: {response.error_msg}")
+        return
+
+    data = response.data
     # 1. Gather counts from ALL data rows
     segment_counts = Counter(row["segment_label"] for row in data)
     total_customers = len(data)

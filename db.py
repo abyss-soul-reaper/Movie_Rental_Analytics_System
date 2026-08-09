@@ -1,7 +1,7 @@
 import mysql.connector
-from mysql.connector import errorcode
 from db_errors import DB_ERROR_MAP
 from execptions.error_codes import ErrorCodes
+from db_helpers import catch_db_errors, check_params
 from execptions.responce_handler import ResponseHandler
 from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT
 
@@ -31,31 +31,35 @@ class DatabaseHandler:
             self.conn = self._get_connection()
         return self.conn.cursor(dictionary=True)
 
+    @catch_db_errors
     def execute_query(self, query, params=()):
         """Used for INSERT, UPDATE, DELETE queries."""
-        formatted_params = self.check_params(params)
+        formatted_params = check_params(params)
         with self.cursor() as cursor:
             cursor.execute(query, formatted_params)
             self.commit()
             return cursor.rowcount
 
+    @catch_db_errors
     def fetch_all(self, query, params=()):
         """Used to get all matching rows."""
-        formatted_params = self.check_params(params)
+        formatted_params = check_params(params)
         with self.cursor() as cursor:
             cursor.execute(query, formatted_params)
             return cursor.fetchall()
 
+    @catch_db_errors
     def fetch_one(self, query, params=()):
         """Used to get a single matching row."""
-        formatted_params = self.check_params(params)
+        formatted_params = check_params(params)
         with self.cursor() as cursor:
             cursor.execute(query, formatted_params)
             return cursor.fetchone()
 
+    @catch_db_errors
     def fetch_many(self, query, size, params=()):
         """Used to get a specific limit of rows."""
-        formatted_params = self.check_params(params)
+        formatted_params = check_params(params)
         with self.cursor() as cursor:
             cursor.execute(query, formatted_params)
             return cursor.fetchmany(size=size)
@@ -63,13 +67,5 @@ class DatabaseHandler:
     def commit(self):
         self.conn.commit()
 
-    @staticmethod
-    def check_params(params):
-        # Catches None, (), [], {}, and forces a safe empty tuple
-        if not params:
-            return ()
-        # Passes pre-formed valid containers directly through
-        if isinstance(params, (tuple, list, dict)):
-            return params
-        # Safely wraps isolated strings/integers into a 1-item tuple
-        return (params,)
+
+
