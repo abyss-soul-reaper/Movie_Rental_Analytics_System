@@ -1,4 +1,6 @@
 import mysql.connector
+from mysql.connector import errorcode
+from db_errors import DB_ERROR_MAP
 from execptions.error_codes import ErrorCodes
 from execptions.responce_handler import ResponseHandler
 from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT
@@ -8,15 +10,25 @@ class DatabaseHandler:
         self.conn = self._get_connection()
 
     def _get_connection(self):
-        return mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME,
-            port=int(DB_PORT)  # Ensure the port is an integer
-        )
+        try:
+            return mysql.connector.connect(
+                host=DB_HOST,
+                user=DB_USER,
+                password=DB_PASSWORD,
+                database=DB_NAME,
+                port=int(DB_PORT)  # Ensure the port is an integer
+            )
+        except mysql.connector.Error as e:
+            error_info = DB_ERROR_MAP.get(e.errno, {
+                "msg": "An unexpected database error occurred.",
+                "technical_msg": str(e),
+                "code": ErrorCodes.DB_CONNECTION_FAILED.value
+            })
+            ResponseHandler.critical(**error_info)
 
     def cursor(self):
+        if not self.conn.is_connected():
+            self.conn = self._get_connection()
         return self.conn.cursor(dictionary=True)
 
     def execute_query(self, query, params=()):

@@ -1,14 +1,14 @@
-# import os
+import os
 import sys
 import logging
 from typing import Any, Optional
 
-# os.makedirs("logs", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
 
-# log_path = os.path.join("logs", "app.log")
+log_path = os.path.join("logs", "app.log")
 
 logging.basicConfig(
-    filename=r'logs\app.log',
+    filename=log_path,
     level=logging.WARNING,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )

@@ -9,7 +9,6 @@ class ErrorCodes(Enum):
     # 2. (Database Layer)
     DB_CONNECTION_FAILED = 2001
     SQL_QUERY_ERROR = 2002
-    EMPTY_RESULT_SET = 2003
     
     # 3. (Business Logic)
     INVALID_DATE_RANGE = 3001
