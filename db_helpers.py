@@ -1,8 +1,7 @@
-# utils/db_helpers.py
 import mysql.connector
 from db_errors import DB_ERROR_MAP
-from execptions.error_codes import ErrorCodes
-from execptions.responce_handler import ResponseHandler
+from exceptions.error_codes import ErrorCodes
+from exceptions.response_handler import ResponseHandler
 
 def check_params(params):
     if not params:
@@ -18,11 +17,12 @@ def catch_db_errors(func):
             return ResponseHandler.ok(func(*args, **kwargs))
         except mysql.connector.Error as e:
             self.conn.rollback()
+
             error_info = DB_ERROR_MAP.get(e.errno, {
                 "msg": "An unexpected database error occurred.",
                 "technical_msg": str(e),
                 "code": ErrorCodes.SQL_QUERY_ERROR.value
             })
-            return ResponseHandler.fail(**error_info)
+            return ResponseHandler.exception(**error_info)
     return wrapper
 

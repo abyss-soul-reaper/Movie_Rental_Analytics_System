@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
-from execptions.error_codes import ErrorCodes
-from execptions.responce_handler import ResponseHandler
+from exceptions.error_codes import ErrorCodes
+from exceptions.response_handler import ResponseHandler
 
 env_loaded = load_dotenv()
 
@@ -41,4 +41,9 @@ if DB_USER.lower() == "root": # type: ignore #
         technical_msg="The 'root' user has full privileges and should only be used for administrative tasks.",
         code=ErrorCodes.ROOT_USER_WARNING.value
     )
+
+ResponseHandler.info("Environment variables and system configurations loaded successfully.")
+
+
+
 

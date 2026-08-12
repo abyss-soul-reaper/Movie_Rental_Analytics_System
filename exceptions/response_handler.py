@@ -7,9 +7,12 @@ os.makedirs("logs", exist_ok=True)
 
 log_path = os.path.join("logs", "app.log")
 
+# prevent mysql.connector from logging at the INFO level to avoid cluttering the logs
+logging.getLogger("mysql.connector").setLevel(logging.WARNING)
+
 logging.basicConfig(
     filename=log_path,
-    level=logging.WARNING,
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
@@ -23,6 +26,15 @@ class ResponseHandler:
     @classmethod
     def ok(cls, data: Any = None):
         return cls(success=True, data=data)
+
+    @classmethod
+    def info(cls, technical_msg: str):
+        logging.info(technical_msg)
+
+    @classmethod
+    def exception(cls, msg: str, technical_msg: Optional[str] = None, code: Optional[int] = None):
+        logging.exception(f"Crash Detected - {technical_msg} [Code: {code}]")
+        return cls(success=False, error_msg=msg, error_code=code)
 
     @classmethod
     def fail(cls, msg: str, technical_msg: Optional[str] = None, code: Optional[int] = None):
