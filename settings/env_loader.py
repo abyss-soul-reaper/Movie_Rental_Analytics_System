@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
-from exceptions.error_codes import ErrorCodes
-from exceptions.response_handler import ResponseHandler
+from pkg_exceptions.status_code import ErrorCodes
+from pkg_exceptions.output_handler import ResponseHandler
 
 env_loaded = load_dotenv()
 

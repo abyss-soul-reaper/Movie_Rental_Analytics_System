@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 os.makedirs("logs", exist_ok=True)
 
-log_path = os.path.join("logs", "app.log")
+log_path = os.path.join("logs", "system.log")
 
 # prevent mysql.connector from logging at the INFO level to avoid cluttering the logs
 logging.getLogger("mysql.connector").setLevel(logging.WARNING)

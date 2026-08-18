@@ -1,5 +1,5 @@
 from mysql.connector import errorcode
-from exceptions.error_codes import ErrorCodes
+from pkg_exceptions.status_code import ErrorCodes
 
 
 CR_CONN_HOST_ERROR = 2003  # Can't connect to MySQL server

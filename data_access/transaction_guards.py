@@ -1,7 +1,11 @@
 import mysql.connector
-from db_errors import DB_ERROR_MAP
-from exceptions.error_codes import ErrorCodes
-from exceptions.response_handler import ResponseHandler
+from functools import wraps
+from typing import Callable, TypeVar
+from pkg_exceptions.status_code import ErrorCodes
+from data_access.exception_mapper import DB_ERROR_MAP
+from pkg_exceptions.output_handler import ResponseHandler
+
+T = TypeVar('T')  # Generic type for return value of the wrapped function
 
 def check_params(params):
     if not params:
@@ -10,7 +14,8 @@ def check_params(params):
         return params
     return (params,)
 
-def catch_db_errors(func):
+def catch_db_errors(func: Callable[..., T]) -> Callable[..., ResponseHandler]:
+    @wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
         try:

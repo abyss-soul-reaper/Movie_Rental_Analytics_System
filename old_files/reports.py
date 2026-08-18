@@ -28,7 +28,7 @@ def customer_segments(response, limit=10):
 
 from db import DatabaseHandler as DBHandler
 
-from database.queries import get_customer_segments
+from queries import get_customer_segments
 
 customer_segments(get_customer_segments(DBHandler()))
 
