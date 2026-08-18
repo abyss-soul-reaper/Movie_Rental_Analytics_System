@@ -19,7 +19,12 @@ def catch_db_errors(func: Callable[..., T]) -> Callable[..., ResponseHandler]:
     def wrapper(*args, **kwargs):
         self = args[0]
         try:
-            return ResponseHandler.ok(func(*args, **kwargs))
+            result = func(*args, **kwargs)
+            
+            if isinstance(result, ResponseHandler):
+                return result
+            
+            return ResponseHandler.ok(result)
         except mysql.connector.Error as e:
             self.conn.rollback()
 
