@@ -1,1 +1,20 @@
+# 1. Environment Variables (Security)
 .env
+
+# 2. Python Bytecode & Cache (System generated)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# 3. Local Application Logs (Privacy)
+logs/
+*.log
+
+# 4. User Generated Reports & Exports (Output)
+reports/
+
+# 5. OS Generated Files (Optional but recommended)
+.DS_Store
+Thumbs.db
