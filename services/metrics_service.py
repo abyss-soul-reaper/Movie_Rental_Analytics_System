@@ -1,6 +1,8 @@
 from pkg_exceptions.output_handler import ResponseHandler
+from pkg_exceptions.app_guards import catch_application_errors
 from data_access.sql_statements import EXECUTIVE_KPI_BASE_QUERY, STORE_PERFORMANCE_BASE_QUERY
 
+@catch_application_errors
 def get_executive_dashboard_metrics(handler, start_date=None, end_date=None, store_id=None):
     kpi_conditions = []
     kpi_params = []
@@ -39,7 +41,6 @@ def get_executive_dashboard_metrics(handler, start_date=None, end_date=None, sto
         company_kpis = company_response.data
         stores_raw_data = stores_response.data
 
-
         total_revenue = float(company_kpis.get("total_revenue", 0.00))
         total_rentals = int(company_kpis.get("total_rentals", 0))
 
@@ -47,7 +48,7 @@ def get_executive_dashboard_metrics(handler, start_date=None, end_date=None, sto
 
         stores_performance_list = []
         top_store_id = None
-        top_store_revenue = -1.0
+        top_store_revenue = 0.00
 
         for store in stores_raw_data:
             s_id = store.get("store_id")
@@ -67,7 +68,7 @@ def get_executive_dashboard_metrics(handler, start_date=None, end_date=None, sto
                 top_store_revenue = s_rev
                 top_store_id = s_id
 
-        dashborad_data = {
+        dashboard_data = {
         "company_overview": {
             "revenue": total_revenue,
             "rentals": total_rentals,
@@ -84,14 +85,5 @@ def get_executive_dashboard_metrics(handler, start_date=None, end_date=None, sto
         }
     }
 
-        return ResponseHandler.ok(dashborad_data)
-    
-    else:
-        error_info = {
-            "msg": "Failed to retrieve dashboard metrics.",
-            "technical_msg": f"Company Response: {company_response.error_msg}, Stores Response: {stores_response.error_msg}",
-            "code": 500
-        }
-        return ResponseHandler.exception(**error_info)
-    
+        return ResponseHandler.ok(dashboard_data)
 

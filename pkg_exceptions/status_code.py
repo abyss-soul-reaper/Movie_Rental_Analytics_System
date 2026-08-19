@@ -17,3 +17,7 @@ class ErrorCodes(Enum):
     # 4. (Exports)
     EXPORT_PERMISSION_DENIED = 4001
     FILE_WRITE_FAILED = 4002
+
+    # 5. (Internal Services)
+    SERVICE_UNAVAILABLE = 5001
+
